@@ -228,7 +228,7 @@ class _AppReservationCardState extends State<AppReservationCard> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text(
-                      'Hiện tại mobile chưa bật hủy reservation từ server.',
+                      'Cancel reservation feature is not implemented yet.',
                     ),
                   ),
                 );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_manager_mobileapp/theme/app_colors.dart';
+import 'package:restaurant_manager_mobileapp/theme/app_fonts.dart';
 
 Future<bool?> showConfirmDialog(
   BuildContext context, {
@@ -15,9 +16,8 @@ Future<bool?> showConfirmDialog(
     barrierDismissible: false,
     builder: (context) {
       return Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
           child: Column(
@@ -58,7 +58,13 @@ Future<bool?> showConfirmDialog(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: Text(cancelText),
+                      child: Text(
+                        cancelText,
+                        style: TextStyle(
+                          fontFamily: AppFonts.roboto,
+                          color: Colors.black,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -71,7 +77,13 @@ Future<bool?> showConfirmDialog(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: Text(confirmText),
+                      child: Text(
+                        confirmText,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: AppFonts.roboto,
+                        ),
+                      ),
                     ),
                   ),
                 ],

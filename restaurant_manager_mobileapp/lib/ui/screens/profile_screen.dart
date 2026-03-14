@@ -162,7 +162,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                             Text(
-                              email.isNotEmpty ? email : "example@gmail.com",
+                              email.isNotEmpty ? email : "guest@gmail.com",
                               style: TextStyle(
                                 color: Colors.black,
                                 fontFamily: AppFonts.poppins,

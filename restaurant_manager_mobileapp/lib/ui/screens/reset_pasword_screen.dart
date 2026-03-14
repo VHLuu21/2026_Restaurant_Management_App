@@ -5,6 +5,7 @@ import 'package:restaurant_manager_mobileapp/ui/widgets/app_glass_layout.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_inputdecoration.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_primary_button.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_route.dart';
+import 'package:restaurant_manager_mobileapp/ui/widgets/app_showSnackbar.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   final String email;
@@ -30,22 +31,37 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     final confirm = _confirmController.text.trim();
 
     if (password.isEmpty || confirm.isEmpty) {
-      ScaffoldMessenger.of(
+      AppShowsnackbar().showCustomSnackBar(
+        "Please fill in all fields",
+        false,
         context,
-      ).showSnackBar(const SnackBar(content: Text("Please fill all fields")));
+      );
       return;
     }
 
     if (password != confirm) {
-      ScaffoldMessenger.of(
+      AppShowsnackbar().showCustomSnackBar(
+        "Passwords do not match",
+        false,
         context,
-      ).showSnackBar(const SnackBar(content: Text("Passwords do not match")));
+      );
       return;
     }
 
     if (password.length < 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Password must be at least 6 characters")),
+      AppShowsnackbar().showCustomSnackBar(
+        "Password must be at least 6 characters",
+        false,
+        context,
+      );
+      return;
+    }
+
+    if (password.length < 6) {
+      AppShowsnackbar().showCustomSnackBar(
+        "Password must be at least 6 characters",
+        false,
+        context,
       );
       return;
     }
@@ -62,8 +78,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       if (!mounted) return;
 
       if (success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Password updated successfully")),
+        AppShowsnackbar().showCustomSnackBar(
+          "Password updated successfully",
+          true,
+          context,
         );
 
         Navigator.pushAndRemoveUntil(
@@ -72,8 +90,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           (route) => false,
         );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Failed to update password")),
+        AppShowsnackbar().showCustomSnackBar(
+          "Failed to update password",
+          false,
+          context,
         );
       }
     } catch (e) {

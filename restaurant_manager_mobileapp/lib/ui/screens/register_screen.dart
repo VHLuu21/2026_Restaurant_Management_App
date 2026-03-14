@@ -4,6 +4,7 @@ import 'package:restaurant_manager_mobileapp/data/auth_service.dart';
 import 'package:restaurant_manager_mobileapp/theme/app_colors.dart';
 import 'package:restaurant_manager_mobileapp/theme/app_fonts.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_inputdecoration.dart';
+import 'package:restaurant_manager_mobileapp/ui/widgets/app_showSnackbar.dart';
 import 'package:restaurant_manager_mobileapp/utils/app_validator.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -40,14 +41,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       if (!mounted) return;
       if (success) {
-        ScaffoldMessenger.of(
+        AppShowsnackbar().showCustomSnackBar(
+          "Registration successful! Please login.",
+          true,
           context,
-        ).showSnackBar(const SnackBar(content: Text("Register successful")));
-        Navigator.pop(context);
+        );
       } else {
-        ScaffoldMessenger.of(
+        AppShowsnackbar().showCustomSnackBar(
+          "Email already exists",
+          false,
           context,
-        ).showSnackBar(const SnackBar(content: Text("Email already exists")));
+        );
       }
     } finally {
       setState(() => _isLoading = false);

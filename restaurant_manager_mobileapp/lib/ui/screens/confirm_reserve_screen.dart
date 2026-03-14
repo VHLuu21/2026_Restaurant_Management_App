@@ -7,6 +7,7 @@ import 'package:restaurant_manager_mobileapp/ui/screens/menu_screen.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_complete_screen.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_custom_app_bar.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_route.dart';
+import 'package:restaurant_manager_mobileapp/ui/widgets/app_showSnackbar.dart';
 
 class ConfirmReserveScreen extends StatefulWidget {
   final int tableId;
@@ -301,21 +302,19 @@ class _ConfirmReserveScreenState extends State<ConfirmReserveScreen> {
                             final seatCount = int.tryParse(widget.seat) ?? 0;
 
                             if (guestCount == null || guestCount <= 0) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Invalid guest count'),
-                                ),
+                              AppShowsnackbar().showCustomSnackBar(
+                                "Invalid guest count",
+                                false,
+                                context,
                               );
                               return;
                             }
 
                             if (guestCount > seatCount) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Guest count exceeds table capacity',
-                                  ),
-                                ),
+                              AppShowsnackbar().showCustomSnackBar(
+                                "Guest count exceeds seat capacity",
+                                false,
+                                context,
                               );
                               return;
                             }
@@ -371,10 +370,10 @@ class _ConfirmReserveScreenState extends State<ConfirmReserveScreen> {
                               );
                             } catch (e) {
                               if (!context.mounted) return;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Reservation failed: $e'),
-                                ),
+                              AppShowsnackbar().showCustomSnackBar(
+                                "Failed to create reservation. Please try again.",
+                                false,
+                                context,
                               );
                             } finally {
                               if (mounted) {

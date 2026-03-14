@@ -5,6 +5,7 @@ import 'package:restaurant_manager_mobileapp/ui/screens/reset_pasword_screen.dar
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_glass_layout.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_otp_field.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_primary_button.dart';
+import 'package:restaurant_manager_mobileapp/ui/widgets/app_showSnackbar.dart';
 
 class VerifyOTPScreen extends StatefulWidget {
   final String email;
@@ -40,13 +41,17 @@ class _VerifyOTPScreenState extends State<VerifyOTPScreen> {
         ),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Invalid or expired OTP")),
-      );
+      AppShowsnackbar().showCustomSnackBar(
+        "Invalid OTP. Please try again.",
+        false,
+        context,
+       );
     }
   } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Connection error")),
+    AppShowsnackbar().showCustomSnackBar(
+      "Connection error",
+      false,
+      context,
     );
   } finally {
     if (mounted) {

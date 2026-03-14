@@ -8,6 +8,7 @@ import 'package:restaurant_manager_mobileapp/ui/screens/main_route_screen.dart';
 import 'package:restaurant_manager_mobileapp/ui/screens/register_screen.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_inputdecoration.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_route.dart';
+import 'package:restaurant_manager_mobileapp/ui/widgets/app_showSnackbar.dart';
 import 'package:restaurant_manager_mobileapp/utils/app_validator.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -44,24 +45,28 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!mounted) return;
 
       if (success) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text("Login successful")));
+        AppShowsnackbar().showCustomSnackBar("Login successful", true, context);
 
-        Navigator.pushReplacement(context, AppRoute.slideFade(const MainRouteScreen()));
+        Navigator.pushReplacement(
+          context,
+          AppRoute.slideFade(const MainRouteScreen()),
+        );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Invalid email or password")),
+        AppShowsnackbar().showCustomSnackBar(
+          "Invalid email or password",
+          false,
+          context,
         );
       }
     } catch (e) {
       setState(() => _isLoading = false);
-      
 
       if (!mounted) return;
       print("LOGIN ERROR: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Connection error. Please try again.")),
+      AppShowsnackbar().showCustomSnackBar(
+        "Connection error. Please try again.",
+        false,
+        context,
       );
     }
   }
@@ -144,7 +149,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                               /// Email
                               TextFormField(
-                                onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                                onTapOutside: (_) =>
+                                    FocusScope.of(context).unfocus(),
                                 controller: _emailController,
                                 style: const TextStyle(color: Colors.white),
                                 decoration: AppInputDecoration.build(
@@ -157,7 +163,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                               /// Password
                               TextFormField(
-                                onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                                onTapOutside: (_) =>
+                                    FocusScope.of(context).unfocus(),
                                 controller: _passwordController,
                                 obscureText: _obscurePassword,
                                 style: const TextStyle(color: Colors.white),

@@ -4,6 +4,7 @@ import 'package:restaurant_manager_mobileapp/ui/screens/login_screen.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_glass_layout.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_inputdecoration.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_primary_button.dart';
+import 'package:restaurant_manager_mobileapp/ui/widgets/app_showSnackbar.dart';
 import 'verify_otp_screen.dart';
 
 class ForgotEmailScreen extends StatefulWidget {
@@ -31,9 +32,7 @@ class _ForgotEmailScreenState extends State<ForgotEmailScreen> {
       if (!mounted) return;
 
       if (!success) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text("Email not found")));
+        AppShowsnackbar().showCustomSnackBar("Email not found", false, context);
         return;
       }
 
@@ -42,9 +41,7 @@ class _ForgotEmailScreenState extends State<ForgotEmailScreen> {
         MaterialPageRoute(builder: (_) => VerifyOTPScreen(email: email)),
       );
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Connection error")));
+      AppShowsnackbar().showCustomSnackBar("Error: ${e.toString()}", false, context);
     } finally {
       setState(() => _isLoading = false);
     }

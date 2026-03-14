@@ -4,6 +4,7 @@ import 'package:restaurant_manager_mobileapp/data/menu_api_service.dart';
 import 'package:restaurant_manager_mobileapp/theme/app_colors.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_custom_app_bar.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_food_vertical.dart';
+import 'package:restaurant_manager_mobileapp/ui/widgets/app_showSnackbar.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_view_orderbar.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -192,14 +193,10 @@ class _MenuScreenState extends State<MenuScreen> {
                                     canOrder: reservation != null,
                                     onAddToCart: (dish) {
                                       if (reservation == null) {
-                                        ScaffoldMessenger.of(
+                                        AppShowsnackbar().showCustomSnackBar(
+                                          "Please make a reservation before adding items to the cart.",
+                                          false,
                                           context,
-                                        ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              'You need to reserve a table before ordering food.',
-                                            ),
-                                          ),
                                         );
                                         return;
                                       }

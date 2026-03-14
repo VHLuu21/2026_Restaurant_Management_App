@@ -8,6 +8,7 @@ import 'package:restaurant_manager_mobileapp/ui/widgets/app_custom_app_bar.dart'
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_order_food_card.dart';
 import 'package:restaurant_manager_mobileapp/data/order_api_service.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_route.dart';
+import 'package:restaurant_manager_mobileapp/ui/widgets/app_showSnackbar.dart';
 import 'package:restaurant_manager_mobileapp/utils/currentcy_extention.dart';
 
 class OrderScreen extends StatelessWidget {
@@ -199,16 +200,6 @@ class OrderScreen extends StatelessWidget {
 
                                           if (!context.mounted) return;
 
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                'Order placed successfully!',
-                                              ),
-                                            ),
-                                          );
-
                                           Navigator.push(
                                             context,
                                             AppRoute.slideFade(
@@ -233,14 +224,10 @@ class OrderScreen extends StatelessWidget {
                                         } catch (e) {
                                           if (!context.mounted) return;
 
-                                          ScaffoldMessenger.of(
+                                          AppShowsnackbar().showCustomSnackBar(
+                                            "Failed to place order: $e",
+                                            false,
                                             context,
-                                          ).showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                'Failed to place order: $e',
-                                              ),
-                                            ),
                                           );
                                         }
                                       },

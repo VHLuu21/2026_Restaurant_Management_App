@@ -35,7 +35,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
   final List<TimeSlot> timeSlots = const [
     TimeSlot(name: "08:00", startHour: 8, endHour: 11),
     TimeSlot(name: "12:00", startHour: 12, endHour: 14),
-    TimeSlot(name: "17:00", startHour: 17, endHour: 24),
+    TimeSlot(name: "17:00", startHour: 17, endHour: 21),
   ];
 
   bool isSlotPassed(TimeSlot slot) {
