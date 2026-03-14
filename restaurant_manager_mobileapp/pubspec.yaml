@@ -1,0 +1,60 @@
+name: restaurant_manager_mobileapp
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_dotenv: ^6.0.0
+  mysql_client: ^0.0.27
+  mailer: ^7.1.0
+  dotted_line: ^3.2.3
+  crypto: ^3.0.3
+  http: ^1.2.2
+  socket_io_client: ^3.0.2
+  shared_preferences: ^2.0.15
+  intl: ^0.20.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/imgs/
+    - assets/imgs/test/
+    - .env
+
+  fonts:
+    - family: Lobster
+      fonts:
+        - asset: assets/fonts/Lobster/Lobster-Regular.ttf
+
+    - family: Lobstertwo
+      fonts:
+        - asset: assets/fonts/Lobster_two/LobsterTwo-Regular.ttf
+        - asset: assets/fonts/Lobster_two/LobsterTwo-Italic.ttf
+        - asset: assets/fonts/Lobster_two/LobsterTwo-Bold.ttf
+
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat/Montserrat-Regular.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-Medium.ttf
+        - asset: assets/fonts/Montserrat/Montserrat-Bold.ttf
+
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto/Roboto-Regular.ttf
+        - asset: assets/fonts/Roboto/Roboto-Bold.ttf
+
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins/Poppins-Medium.ttf
+        - asset: assets/fonts/Poppins/Poppins-Bold.ttf
