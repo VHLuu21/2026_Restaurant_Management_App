@@ -4,6 +4,7 @@ import 'package:restaurant_manager_mobileapp/theme/app_colors.dart';
 import 'package:restaurant_manager_mobileapp/theme/app_fonts.dart';
 import 'package:restaurant_manager_mobileapp/ui/screens/confirm_reserve_screen.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_route.dart';
+import 'package:restaurant_manager_mobileapp/ui/widgets/app_showSnackbar.dart';
 
 class AppTableCard extends StatefulWidget {
   final TableItem item;
@@ -27,8 +28,10 @@ class _AppTableCardState extends State<AppTableCard> {
         if (widget.item.tableStatus != 'Available') return;
 
         if (widget.selectedTimeSlot == null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Please select a time slot first')),
+          AppShowsnackbar().showCustomSnackBar(
+            "Please select a time slot first.",
+            false,
+            context,
           );
           return;
         }

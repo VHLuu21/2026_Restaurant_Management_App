@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:restaurant_manager_mobileapp/data/menu_api_service.dart';
 import 'package:restaurant_manager_mobileapp/theme/app_colors.dart';
 import 'package:restaurant_manager_mobileapp/theme/app_fonts.dart';
+import 'package:restaurant_manager_mobileapp/ui/widgets/app_showSnackbar.dart';
 import 'package:restaurant_manager_mobileapp/utils/currentcy_extention.dart';
 
 class AppFoodVertical extends StatelessWidget {
@@ -114,12 +115,10 @@ class AppFoodVertical extends StatelessWidget {
       return GestureDetector(
         onTap: () {
           if (!canOrder) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text(
-                  'You need to reserve a table before ordering food.',
-                ),
-              ),
+            AppShowsnackbar().showCustomSnackBar(
+              "Please make a reservation before adding items to the cart.",
+              false,
+              context,
             );
             return;
           }

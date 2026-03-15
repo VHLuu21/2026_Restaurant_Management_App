@@ -33,14 +33,111 @@ class _ReserveScreenState extends State<ReserveScreen> {
   late String currentDate;
 
   final List<TimeSlot> timeSlots = const [
-    TimeSlot(name: "08:00", startHour: 8, endHour: 11),
-    TimeSlot(name: "12:00", startHour: 12, endHour: 14),
-    TimeSlot(name: "17:00", startHour: 17, endHour: 21),
+    TimeSlot(
+      name: "08:00",
+      startHour: 8,
+      startMinute: 0,
+      endHour: 8,
+      endMinute: 45,
+      period: "Morning",
+    ),
+    TimeSlot(
+      name: "9:00",
+      startHour: 9,
+      startMinute: 0,
+      endHour: 9,
+      endMinute: 45,
+      period: "Morning",
+    ),
+    TimeSlot(
+      name: "10:00",
+      startHour: 10,
+      startMinute: 0,
+      endHour: 10,
+      endMinute: 45,
+      period: "Morning",
+    ),
+    TimeSlot(
+      name: "11:30",
+      startHour: 11,
+      startMinute: 30,
+      endHour: 12,
+      endMinute: 15,
+      period: "Lunch",
+    ),
+    TimeSlot(
+      name: "12:30",
+      startHour: 12,
+      startMinute: 30,
+      endHour: 13,
+      endMinute: 15,
+      period: "Lunch",
+    ),
+    TimeSlot(
+      name: "13:30",
+      startHour: 13,
+      startMinute: 30,
+      endHour: 14,
+      endMinute: 15,
+      period: "Lunch",
+    ),
+    TimeSlot(
+      name: "17:00",
+      startHour: 17,
+      startMinute: 0,
+      endHour: 17,
+      endMinute: 45,
+      period: "Dinner",
+    ),
+    TimeSlot(
+      name: "18:00",
+      startHour: 18,
+      startMinute: 0,
+      endHour: 18,
+      endMinute: 45,
+      period: "Dinner",
+    ),
+    TimeSlot(
+      name: "19:00",
+      startHour: 19,
+      startMinute: 0,
+      endHour: 19,
+      endMinute: 45,
+      period: "Dinner",
+    ),
+    TimeSlot(
+      name: "20:00",
+      startHour: 20,
+      startMinute: 0,
+      endHour: 20,
+      endMinute: 45,
+      period: "Dinner",
+    ),
+    TimeSlot(
+      name: "21:00",
+      startHour: 21,
+      startMinute: 0,
+      endHour: 21,
+      endMinute: 45,
+      period: "Dinner",
+    ),
   ];
+
+  Map<String, List<TimeSlot>> get groupedSlots {
+    final Map<String, List<TimeSlot>> map = {};
+
+    for (final slot in timeSlots) {
+      map.putIfAbsent(slot.period, () => []);
+      map[slot.period]!.add(slot);
+    }
+
+    return map;
+  }
 
   bool isSlotPassed(TimeSlot slot) {
     final now = DateTime.now();
-    return now.hour >= slot.endHour;
+    return now.hour > slot.endHour ||
+        (now.hour == slot.endHour && now.minute >= slot.endMinute);
   }
 
   @override
@@ -198,6 +295,8 @@ class _ReserveScreenState extends State<ReserveScreen> {
                 ],
               ),
             ),
+
+            /// Time slot selection
             const SizedBox(height: 15),
             const Padding(
               padding: EdgeInsets.only(left: 15, bottom: 5),
@@ -206,71 +305,93 @@ class _ReserveScreenState extends State<ReserveScreen> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
-            SizedBox(
-              height: 65,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                itemCount: timeSlots.length,
-                itemBuilder: (context, index) {
-                  final slot = timeSlots[index];
-                  final passed = isSlotPassed(slot);
-                  final selected = selectedSlot == slot.name;
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: groupedSlots.entries.map((entry) {
+                  final period = entry.key;
+                  final slots = entry.value;
 
-                  return GestureDetector(
-                    onTap: passed
-                        ? null
-                        : () {
-                            setState(() {
-                              selectedSlot = slot.name;
-                            });
-                          },
-                    child: Container(
-                      width: 120,
-                      margin: const EdgeInsets.only(right: 10),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 8,
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        period,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      decoration: BoxDecoration(
-                        color: passed
-                            ? Colors.grey.shade200
-                            : selected
-                            ? AppColors.text
-                            : AppColors.background,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.black45),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            slot.name,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: passed ? Colors.grey : Colors.black,
+
+                      const SizedBox(height: 8),
+
+                      Wrap(
+                        spacing: 10,
+                        runSpacing: 10,
+                        children: slots.map((slot) {
+                          final passed = isSlotPassed(slot);
+                          final selected = selectedSlot == slot.name;
+
+                          return GestureDetector(
+                            onTap: passed
+                                ? null
+                                : () {
+                                    setState(() {
+                                      selectedSlot = slot.name;
+                                    });
+                                  },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 14,
+                                vertical: 10,
+                              ),
+                              decoration: BoxDecoration(
+                                color: passed
+                                    ? Colors.grey.shade200
+                                    : selected
+                                    ? AppColors.text
+                                    : AppColors.background,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: Colors.black45),
+                              ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    slot.name,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: passed
+                                          ? Colors.grey
+                                          : Colors.black,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    "${slot.startHour.toString().padLeft(2, '0')}:${slot.startMinute.toString().padLeft(2, '0')} - ${slot.endHour.toString().padLeft(2, '0')}:${slot.endMinute.toString().padLeft(2, '0')}",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: passed
+                                          ? Colors.grey
+                                          : Colors.black54,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            "${slot.startHour}:00 - ${slot.endHour}:00",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: passed
-                                  ? Colors.grey
-                                  : selected
-                                  ? Colors.black54
-                                  : Colors.grey,
-                            ),
-                          ),
-                        ],
+                          );
+                        }).toList(),
                       ),
-                    ),
+
+                      const SizedBox(height: 15),
+                    ],
                   );
-                },
+                }).toList(),
               ),
             ),
             const SizedBox(height: 15),
+
+            /// Floor selection
             const Padding(
               padding: EdgeInsets.only(left: 15, bottom: 5),
               child: Text(
@@ -308,6 +429,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
     );
   }
 
+  /// Builds the section that displays available tables, along with loading and error states.
   Widget _buildTablesSection() {
     if (isLoadingTables) {
       return const Padding(

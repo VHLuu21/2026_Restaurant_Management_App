@@ -47,6 +47,58 @@ class _ConfirmReserveScreenState extends State<ConfirmReserveScreen> {
     return DateTime(now.year, now.month, now.day, hour, minute);
   }
 
+  Widget _infoRow(IconData icon, String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        children: [
+          Icon(icon, size: 18, color: AppColors.icon),
+          const SizedBox(width: 8),
+          Text(
+            "$label: ",
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              fontFamily: AppFonts.poppins,
+            ),
+          ),
+          Text(
+            value,
+            style: const TextStyle(fontFamily: AppFonts.poppins),
+          ),
+        ],
+      ),
+    );
+  }
+
+  InputDecoration _inputDecoration({
+    required String hint,
+    required IconData icon,
+  }) {
+    return InputDecoration(
+      prefixIcon: Icon(icon),
+      hintText: hint,
+      hintStyle: const TextStyle(color: AppColors.hinttext),
+      filled: true,
+      fillColor: Colors.white.withValues(alpha: 0.1),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(width: 1, color: Colors.white),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: AppColors.icon, width: 1.5),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(
+          width: 1,
+          color: Colors.black.withValues(alpha: 0.5),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,238 +109,125 @@ class _ConfirmReserveScreenState extends State<ConfirmReserveScreen> {
           child: Form(
             key: formKey,
             child: Padding(
-              padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
+              padding: const EdgeInsets.all(15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    "Information table",
+                    "Table information",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-                  const SizedBox(height: 7),
+                  const SizedBox(height: 8),
+
+                  /// TABLE INFO CARD
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(8),
-                    height: 120,
+                    padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: AppColors.conprofile,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        width: 1,
-                        color: Colors.black.withValues(alpha: 0.1),
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          "Floor: ${widget.floor}",
-                          style: const TextStyle(
-                            fontFamily: AppFonts.poppins,
-                            fontSize: 14,
-                          ),
-                        ),
-                        Text(
-                          "Table number: ${widget.tableNumber}",
-                          style: const TextStyle(
-                            fontFamily: AppFonts.poppins,
-                            fontSize: 14,
-                          ),
-                        ),
-                        Text(
-                          "Seat: ${widget.seat}",
-                          style: const TextStyle(
-                            fontFamily: AppFonts.poppins,
-                            fontSize: 14,
-                          ),
-                        ),
-                        Text(
-                          "Time slot: ${widget.timeSlot}",
-                          style: const TextStyle(
-                            fontFamily: AppFonts.poppins,
-                            fontSize: 14,
-                          ),
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: Colors.black12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 6,
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _infoRow(Icons.layers_outlined, "Floor", widget.floor),
+                        _infoRow(
+                          Icons.table_restaurant,
+                          "Table",
+                          widget.tableNumber,
+                        ),
+                        _infoRow(Icons.event_seat, "Seat", widget.seat),
+                        _infoRow(Icons.access_time, "Time", widget.timeSlot),
+                      ],
+                    ),
                   ),
+
                   const SizedBox(height: 25),
+
                   const Text(
                     "Guest information",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-                  const SizedBox(height: 7),
-                  Container(
-                    width: double.infinity,
-                    height: 265,
-                    decoration: BoxDecoration(
-                      color: AppColors.conprofile,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        width: 1,
-                        color: Colors.black.withValues(alpha: 0.1),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        top: 15,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            onTapOutside: (_) =>
-                                FocusScope.of(context).unfocus(),
-                            onChanged: (value) => name = value,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Please enter your name";
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              hintText: "Name",
-                              hintStyle: const TextStyle(
-                                color: AppColors.hinttext,
-                              ),
-                              filled: true,
-                              fillColor: Colors.white.withValues(alpha: 0.1),
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 15,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                  width: 1,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                  color: AppColors.icon,
-                                  width: 1.5,
-                                ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(
-                                  width: 1,
-                                  color: Colors.black.withValues(alpha: 0.5),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            onTapOutside: (_) =>
-                                FocusScope.of(context).unfocus(),
-                            onChanged: (value) => phone = value,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Please enter your phone number";
-                              }
-                              return null;
-                            },
-                            keyboardType: TextInputType.phone,
-                            decoration: InputDecoration(
-                              hintText: "Phone number",
-                              hintStyle: const TextStyle(
-                                color: AppColors.hinttext,
-                              ),
-                              filled: true,
-                              fillColor: Colors.white.withValues(alpha: 0.1),
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 15,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                  width: 1,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                  color: AppColors.icon,
-                                  width: 1.5,
-                                ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(
-                                  width: 1,
-                                  color: Colors.black.withValues(alpha: 0.5),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            onTapOutside: (_) =>
-                                FocusScope.of(context).unfocus(),
-                            onChanged: (value) => numberOfPeople = value,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Please enter the number of people";
-                              }
-                              final parsed = int.tryParse(value);
-                              if (parsed == null || parsed <= 0) {
-                                return "Invalid guest count";
-                              }
-                              return null;
-                            },
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              hintText: "Number of people",
-                              hintStyle: const TextStyle(
-                                color: AppColors.hinttext,
-                              ),
-                              filled: true,
-                              fillColor: Colors.white.withValues(alpha: 0.1),
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 15,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                  width: 1,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                  color: AppColors.icon,
-                                  width: 1.5,
-                                ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(
-                                  width: 1,
-                                  color: Colors.black.withValues(alpha: 0.5),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+
+                  const SizedBox(height: 10),
+
+                  /// NAME
+                  TextFormField(
+                    onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                    onChanged: (value) => name = value,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter your name";
+                      }
+                      return null;
+                    },
+                    decoration: _inputDecoration(
+                      hint: "Your name",
+                      icon: Icons.person_outline,
                     ),
                   ),
-                  const SizedBox(height: 150),
+
+                  const SizedBox(height: 12),
+
+                  /// PHONE
+                  TextFormField(
+                    onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                    onChanged: (value) => phone = value,
+                    keyboardType: TextInputType.phone,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter your phone number";
+                      }
+                      return null;
+                    },
+                    decoration: _inputDecoration(
+                      hint: "Phone number",
+                      icon: Icons.phone_outlined,
+                    ),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  /// GUEST COUNT
+                  TextFormField(
+                    onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                    onChanged: (value) => numberOfPeople = value,
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter the number of people";
+                      }
+                      final parsed = int.tryParse(value);
+                      if (parsed == null || parsed <= 0) {
+                        return "Invalid guest count";
+                      }
+                      return null;
+                    },
+                    decoration: _inputDecoration(
+                      hint: "Number of guests",
+                      icon: Icons.groups_outlined,
+                    ),
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  /// CONFIRM BUTTON
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.text,
-                      minimumSize: const Size(double.infinity, 50),
+                      elevation: 3,
+                      shadowColor: Colors.black26,
+                      minimumSize: const Size(double.infinity, 55),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(14),
                       ),
                     ),
                     onPressed: isSubmitting
@@ -351,25 +290,29 @@ class _ConfirmReserveScreenState extends State<ConfirmReserveScreen> {
 
                               if (!context.mounted) return;
 
-                              Navigator.push(context,
+                              Navigator.push(
+                                context,
                                 AppRoute.slideFade(
                                   AppCompleteWidget(
-                                    title: "Reservation successful!", 
-                                    message: "Your table has been reserved. We look forward to serving you.", 
-                                    question: "What would you like to do next?", 
-                                    primaryText: "Order now", 
+                                    title: "Reservation successful!",
+                                    message:
+                                        "Your table has been reserved. We look forward to serving you.",
+                                    question:
+                                        "What would you like to do next?",
+                                    primaryText: "Order now",
                                     onPrimaryPressed: () {
                                       Navigator.pushAndRemoveUntil(
                                         context,
                                         AppRoute.slideFade(const MenuScreen()),
                                         (route) => route.isFirst,
                                       );
-                                    }
-                                  )
-                                )
+                                    },
+                                  ),
+                                ),
                               );
                             } catch (e) {
                               if (!context.mounted) return;
+
                               AppShowsnackbar().showCustomSnackBar(
                                 "Failed to create reservation. Please try again.",
                                 false,
@@ -383,15 +326,24 @@ class _ConfirmReserveScreenState extends State<ConfirmReserveScreen> {
                               }
                             }
                           },
-                    child: Text(
-                      isSubmitting ? "Submitting..." : "Confirm Reservation",
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontFamily: AppFonts.poppins,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+                    child: isSubmitting
+                        ? const SizedBox(
+                            height: 22,
+                            width: 22,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.black,
+                            ),
+                          )
+                        : const Text(
+                            "Confirm Reservation",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: AppFonts.poppins,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                   ),
                 ],
               ),
