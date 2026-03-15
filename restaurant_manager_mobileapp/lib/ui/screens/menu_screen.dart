@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:restaurant_manager_mobileapp/data/app_session.dart';
 import 'package:restaurant_manager_mobileapp/data/menu_api_service.dart';
 import 'package:restaurant_manager_mobileapp/theme/app_colors.dart';
+import 'package:restaurant_manager_mobileapp/ui/screens/food_detail_screen.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_custom_app_bar.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_food_vertical.dart';
+import 'package:restaurant_manager_mobileapp/ui/widgets/app_route.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_showSnackbar.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_view_orderbar.dart';
 
@@ -185,12 +187,22 @@ class _MenuScreenState extends State<MenuScreen> {
                                   )
                                 : dishes.isEmpty
                                 ? const Center(
-                                    child: Text('No dishes available in this category.'),
+                                    child: Text(
+                                      'No dishes available in this category.',
+                                    ),
                                   )
                                 : AppFoodVertical(
                                     items: dishes,
                                     quantities: quantities,
                                     canOrder: reservation != null,
+                                    onFoodTap: (food) {
+                                      Navigator.push(
+                                        context,
+                                        AppRoute.slideFade(
+                                          FoodDetailScreen(food: food),
+                                        ),
+                                      );
+                                    },
                                     onAddToCart: (dish) {
                                       if (reservation == null) {
                                         AppShowsnackbar().showCustomSnackBar(

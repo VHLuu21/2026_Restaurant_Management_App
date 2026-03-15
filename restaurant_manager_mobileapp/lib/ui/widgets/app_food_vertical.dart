@@ -10,6 +10,7 @@ class AppFoodVertical extends StatelessWidget {
   final bool canOrder;
   final ValueChanged<MobileMenuDish> onAddToCart;
   final ValueChanged<int> onRemoveFromCart;
+  final ValueChanged<MobileMenuDish>? onFoodTap;
 
   const AppFoodVertical({
     super.key,
@@ -18,6 +19,7 @@ class AppFoodVertical extends StatelessWidget {
     required this.canOrder,
     required this.onAddToCart,
     required this.onRemoveFromCart,
+    this.onFoodTap,
   });
 
   @override
@@ -30,70 +32,73 @@ class AppFoodVertical extends StatelessWidget {
         final food = items[index];
         final quantity = quantities[food.id] ?? 0;
 
-        return Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 6,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: _buildImage(food.imageUrl),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      food.name,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      food.description.isEmpty
-                          ? food.categoryName
-                          : food.description,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: Colors.grey.shade700,
-                        fontSize: 13,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      food.price.toVND(),
-                      style: const TextStyle(
-                        color: Colors.amber,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ],
+        return GestureDetector(
+          onTap: () => onFoodTap?.call(food),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 6,
+                  offset: const Offset(0, 3),
                 ),
-              ),
-              const SizedBox(width: 10),
-              _buildActionButton(
-                context: context,
-                food: food,
-                quantity: quantity,
-              ),
-            ],
+              ],
+            ),
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: _buildImage(food.imageUrl),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        food.name,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        food.description.isEmpty
+                            ? food.categoryName
+                            : food.description,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.grey.shade700,
+                          fontSize: 13,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        food.price.toVND(),
+                        style: const TextStyle(
+                          color: Colors.amber,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 10),
+                _buildActionButton(
+                  context: context,
+                  food: food,
+                  quantity: quantity,
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -111,7 +116,9 @@ class AppFoodVertical extends StatelessWidget {
           if (!canOrder) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('You need to reserve a table before ordering food.'),
+                content: Text(
+                  'You need to reserve a table before ordering food.',
+                ),
               ),
             );
             return;

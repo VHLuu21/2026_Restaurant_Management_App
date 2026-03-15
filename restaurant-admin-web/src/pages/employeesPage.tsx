@@ -6,6 +6,7 @@ import {
   InputNumber,
   Modal,
   Popconfirm,
+  Select,
   Space,
   Table,
   Typography,
@@ -30,6 +31,14 @@ interface EmployeeFormValues {
   salary?: number;
   avatar?: string;
 }
+
+const positionOptions = [
+  { label: 'Quản lý', value: 'MANAGER' },
+  { label: 'Phục vụ', value: 'WAITER' },
+  { label: 'Đầu bếp', value: 'CHEF' },
+  { label: 'Thu ngân', value: 'CASHIER' },
+  { label: 'Lễ tân', value: 'RECEPTIONIST' },
+];
 
 export default function EmployeesPage() {
   const [data, setData] = useState<Employee[]>([]);
@@ -182,6 +191,12 @@ export default function EmployeesPage() {
           {
             title: 'Chức vụ',
             dataIndex: 'position',
+            render: (value: string) => {
+              const found = positionOptions.find(
+                (p) => p.value === value
+              );
+              return found?.label || value;
+            },
           },
           {
             title: 'Lương',
@@ -231,12 +246,22 @@ export default function EmployeesPage() {
             <Input />
           </Form.Item>
 
-          <Form.Item label="Chức vụ" name="position">
-            <Input />
+          <Form.Item
+            label="Chức vụ"
+            name="position"
+            rules={[{ required: true, message: 'Chọn chức vụ' }]}
+          >
+            <Select
+              placeholder="Chọn chức vụ"
+              options={positionOptions}
+            />
           </Form.Item>
 
           <Form.Item label="Lương" name="salary">
-            <InputNumber style={{ width: '100%' }} min={0} />
+            <InputNumber
+              style={{ width: '100%' }}
+              min={0}
+            />
           </Form.Item>
 
           <Form.Item label="Avatar URL" name="avatar">

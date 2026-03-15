@@ -2,9 +2,18 @@ import {
   IsString,
   IsOptional,
   IsNumber,
-  IsDateString,
-  IsEmail
+  IsEnum,
+  IsEmail,
+  IsDateString
 } from 'class-validator';
+
+export enum EmployeePosition {
+  MANAGER = 'MANAGER',
+  WAITER = 'WAITER',
+  CHEF = 'CHEF',
+  CASHIER = 'CASHIER',
+  RECEPTIONIST = 'RECEPTIONIST',
+}
 
 export class CreateEmployeeDto {
 
@@ -22,8 +31,8 @@ export class CreateEmployeeDto {
   @IsString()
   avatar?: string;
 
-  @IsString()
-  position: string;
+  @IsEnum(EmployeePosition)
+  position: EmployeePosition;
 
   @IsOptional()
   @IsNumber()

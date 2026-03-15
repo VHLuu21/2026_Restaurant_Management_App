@@ -9,8 +9,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateEmployeeDto = void 0;
+exports.CreateEmployeeDto = exports.EmployeePosition = void 0;
 const class_validator_1 = require("class-validator");
+var EmployeePosition;
+(function (EmployeePosition) {
+    EmployeePosition["MANAGER"] = "MANAGER";
+    EmployeePosition["WAITER"] = "WAITER";
+    EmployeePosition["CHEF"] = "CHEF";
+    EmployeePosition["CASHIER"] = "CASHIER";
+    EmployeePosition["RECEPTIONIST"] = "RECEPTIONIST";
+})(EmployeePosition || (exports.EmployeePosition = EmployeePosition = {}));
 class CreateEmployeeDto {
 }
 exports.CreateEmployeeDto = CreateEmployeeDto;
@@ -33,7 +41,7 @@ __decorate([
     __metadata("design:type", String)
 ], CreateEmployeeDto.prototype, "avatar", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsEnum)(EmployeePosition),
     __metadata("design:type", String)
 ], CreateEmployeeDto.prototype, "position", void 0);
 __decorate([

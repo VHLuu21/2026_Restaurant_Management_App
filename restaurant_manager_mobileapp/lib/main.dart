@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:restaurant_manager_mobileapp/ui/screens/login_screen.dart';
 import 'package:restaurant_manager_mobileapp/ui/screens/main_route_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,7 +10,7 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
