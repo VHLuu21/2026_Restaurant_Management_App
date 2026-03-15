@@ -9,6 +9,7 @@ import ReservationsPage from './pages/ReservationsPage';
 import TableLayoutPage from './pages/TableLayoutPage';
 import TablesPage from './pages/TablesPage';
 import OrdersPage from './pages/OrdersPage';
+import EmployeesPage from './pages/employeesPage';
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
         <Route path="/menu/categories" element={<MenuCategoriesPage />} />
         <Route path="/menu/dishes" element={<DishesPage />} />
         <Route path="/orders" element={<OrdersPage />} />
+        <Route  path="/employees" element={<EmployeesPage />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/dashboard" replace />} />

@@ -7,6 +7,7 @@ import {
     TableOutlined,
     TagsOutlined,
     UnorderedListOutlined,
+    UserOutlined,
 } from '@ant-design/icons';
 import { Button, Layout, Menu, Space, Typography } from 'antd';
 import { useEffect, useMemo } from 'react';
@@ -33,6 +34,7 @@ export default function AppLayout() {
         if (location.pathname.startsWith('/menu/categories')) return '/menu/categories';
         if (location.pathname.startsWith('/menu/dishes')) return '/menu/dishes';
         if (location.pathname.startsWith('/orders')) return '/orders';
+        if (location.pathname.startsWith('/employees')) return '/employees';
         return '/dashboard';
     }, [location.pathname]);
 
@@ -96,6 +98,11 @@ export default function AppLayout() {
                             key: '/menu/dishes',
                             icon: <MenuOutlined />,
                             label: <Link to="/menu/dishes">Dishes</Link>,
+                        },
+                        {
+                            key: '/employees',
+                            icon: <UserOutlined />,
+                            label: <Link to="/employees">Employees</Link>,
                         },
                     ]}
                 />

@@ -27,6 +27,8 @@ const dish_entity_1 = require("./menu/dishes/dish.entity");
 const order_entity_1 = require("./orders/order.entity");
 const order_item_entity_1 = require("./orders/order-item.entity");
 const otp_entity_1 = require("./otp/otp.entity");
+const employee_entity_1 = require("./employees/employee.entity");
+const employees_module_1 = require("./employees/employees.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -52,6 +54,7 @@ exports.AppModule = AppModule = __decorate([
                         order_entity_1.Order,
                         order_item_entity_1.OrderItem,
                         otp_entity_1.OtpCode,
+                        employee_entity_1.Employee,
                     ],
                     synchronize: true,
                 }),
@@ -65,6 +68,7 @@ exports.AppModule = AppModule = __decorate([
             categories_module_1.CategoriesModule,
             dishes_module_1.DishesModule,
             orders_module_1.OrdersModule,
+            employees_module_1.EmployeesModule,
         ],
     })
 ], AppModule);

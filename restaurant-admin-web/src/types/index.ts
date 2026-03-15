@@ -99,3 +99,13 @@ export interface Order {
     createdAt?: string;
     updatedAt?: string;
 }
+
+export interface Employee {
+    id: number;
+    fullName: string;
+    phone?: string;
+    position?: string;
+    salary?: number;
+    avatarUrl?: string;
+    isActive?: boolean;
+}

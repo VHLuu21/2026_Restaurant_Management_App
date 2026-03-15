@@ -20,6 +20,8 @@ import { Dish } from './menu/dishes/dish.entity';
 import { Order } from './orders/order.entity';
 import { OrderItem } from './orders/order-item.entity';
 import { OtpCode } from './otp/otp.entity';
+import { Employee } from './employees/employee.entity';
+import { EmployeesModule } from './employees/employees.module';
 
 @Module({
     imports: [
@@ -43,6 +45,7 @@ import { OtpCode } from './otp/otp.entity';
                     Order,
                     OrderItem,
                     OtpCode,
+                    Employee,
                 ],
                 synchronize: true,
             }),
@@ -57,6 +60,7 @@ import { OtpCode } from './otp/otp.entity';
         CategoriesModule,
         DishesModule,
         OrdersModule,
+        EmployeesModule,
     ],
 })
 export class AppModule { }
