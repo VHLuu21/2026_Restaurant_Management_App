@@ -86,6 +86,29 @@ class _MenuScreenState extends State<MenuScreen> {
     }
   }
 
+  bool _canOrder(ReservationSummary? reservation) {
+    if (reservation == null) return false;
+    return reservation.status.toUpperCase() == "PENDING" ||
+        reservation.status.toUpperCase() == "CONFIRMED";
+  }
+
+  String _orderBlockedMessage(ReservationSummary? reservation) {
+    if (reservation == null) {
+      return "Please make a reservation before ordering.";
+    }
+
+    switch (reservation.status.toUpperCase()) {
+      case "REJECTED":
+        return "Your reservation was rejected.";
+      case "CANCELLED":
+        return "This reservation has been cancelled.";
+      case "COMPLETED":
+        return "This reservation is already completed.";
+      default:
+        return "Ordering is not available.";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ReservationSummary?>(
@@ -94,6 +117,14 @@ class _MenuScreenState extends State<MenuScreen> {
         return ValueListenableBuilder<Map<int, CartLine>>(
           valueListenable: AppSession.cart,
           builder: (context, cart, __) {
+            if (reservation != null &&
+                reservation.status.toUpperCase() != "PENDING" &&
+                    reservation.status.toUpperCase() != "CONFIRMED" &&
+                AppSession.cartCount > 0) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                AppSession.clearCart();
+              });
+            }
             final quantities = <int, int>{};
             for (final entry in cart.entries) {
               quantities[entry.key] = entry.value.quantity;
@@ -194,7 +225,7 @@ class _MenuScreenState extends State<MenuScreen> {
                                 : AppFoodVertical(
                                     items: dishes,
                                     quantities: quantities,
-                                    canOrder: reservation != null,
+                                    canOrder: _canOrder(reservation),
                                     onFoodTap: (food) {
                                       Navigator.push(
                                         context,
@@ -204,9 +235,9 @@ class _MenuScreenState extends State<MenuScreen> {
                                       );
                                     },
                                     onAddToCart: (dish) {
-                                      if (reservation == null) {
+                                      if (!_canOrder(reservation)) {
                                         AppShowsnackbar().showCustomSnackBar(
-                                          "Please make a reservation before adding items to the cart.",
+                                          _orderBlockedMessage(reservation),
                                           false,
                                           context,
                                         );
@@ -223,7 +254,7 @@ class _MenuScreenState extends State<MenuScreen> {
                         ],
                       ],
                     ),
-                    if (AppSession.cartCount > 0)
+                    if (AppSession.cartCount > 0 && _canOrder(reservation))
                       Positioned(
                         bottom: 20,
                         left: 20,

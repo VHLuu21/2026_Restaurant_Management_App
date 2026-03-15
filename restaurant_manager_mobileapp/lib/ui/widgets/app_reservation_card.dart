@@ -1,11 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:restaurant_manager_mobileapp/data/order_api_service.dart';
 import 'package:restaurant_manager_mobileapp/data/app_session.dart';
+import 'package:restaurant_manager_mobileapp/data/reservation_api_service.dart';
 import 'package:restaurant_manager_mobileapp/theme/app_colors.dart';
 import 'package:restaurant_manager_mobileapp/theme/app_fonts.dart';
 import 'package:restaurant_manager_mobileapp/ui/screens/menu_screen.dart';
 import 'package:restaurant_manager_mobileapp/ui/screens/order_details_screen.dart';
 import 'package:restaurant_manager_mobileapp/ui/widgets/app_route.dart';
+import 'package:restaurant_manager_mobileapp/ui/widgets/app_showSnackbar.dart';
 
 class AppReservationCard extends StatefulWidget {
   final ReservationSummary reservation;
@@ -19,11 +23,18 @@ class AppReservationCard extends StatefulWidget {
 class _AppReservationCardState extends State<AppReservationCard> {
   int? orderId;
   bool loading = true;
+  Timer? timer;
 
   @override
   void initState() {
     super.initState();
     checkOrder();
+
+    refreshStatus();
+
+    timer = Timer.periodic(const Duration(seconds: 30), (timer) {
+      refreshStatus();
+    });
   }
 
   Future<void> checkOrder() async {
@@ -41,6 +52,47 @@ class _AppReservationCardState extends State<AppReservationCard> {
         loading = false;
       });
     }
+  }
+
+  Future<void> refreshStatus() async {
+    try {
+      final json = await ReservationApiService.getPublicReservationStatus(
+        widget.reservation.id,
+      );
+
+      final updated = ReservationSummary.fromStatusJson(
+        widget.reservation,
+        json,
+      );
+
+      AppSession.setReservation(updated, clearCartItems: false);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  bool _canOrder(String status) {
+    return status.toUpperCase() == "CONFIRMED" ||
+        status.toUpperCase() == "PENDING";
+  }
+
+  String _orderBlockedMessage(String status) {
+    switch (status) {
+      case "COMPLETED":
+        return "This reservation has already been completed.";
+      case "REJECTED":
+        return "Your reservation was rejected by the restaurant.";
+      case "CANCELLED":
+        return "This reservation has been cancelled.";
+      default:
+        return "Ordering is not available.";
+    }
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
 
   String _statusText(String status) {
@@ -79,7 +131,8 @@ class _AppReservationCardState extends State<AppReservationCard> {
 
   @override
   Widget build(BuildContext context) {
-    final reservation = widget.reservation;
+    final reservation =
+        AppSession.currentReservation.value ?? widget.reservation;
     final statusColor = _statusColor(reservation.status);
 
     return Container(
@@ -175,7 +228,9 @@ class _AppReservationCardState extends State<AppReservationCard> {
             width: double.infinity,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.text,
+                backgroundColor: _canOrder(reservation.status)
+                    ? AppColors.text
+                    : Colors.grey.shade300,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 40,
                   vertical: 15,
@@ -187,6 +242,15 @@ class _AppReservationCardState extends State<AppReservationCard> {
               onPressed: loading
                   ? null
                   : () {
+                      final status = reservation.status.toUpperCase();
+                      if (!_canOrder(status)) {
+                        AppShowsnackbar().showCustomSnackBar(
+                          _orderBlockedMessage(status),
+                          false,
+                          context,
+                        );
+                        return;
+                      }
                       if (orderId == null) {
                         Navigator.push(
                           context,
@@ -225,12 +289,10 @@ class _AppReservationCardState extends State<AppReservationCard> {
             width: double.infinity,
             child: OutlinedButton(
               onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      'Cancel reservation feature is not implemented yet.',
-                    ),
-                  ),
+                AppShowsnackbar().showCustomSnackBar(
+                  "Cancellation is not implemented yet.",
+                  false,
+                  context,
                 );
               },
               style: OutlinedButton.styleFrom(

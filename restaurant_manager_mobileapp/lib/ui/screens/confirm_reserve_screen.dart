@@ -186,6 +186,9 @@ class _ConfirmReserveScreenState extends State<ConfirmReserveScreen> {
                       if (value == null || value.isEmpty) {
                         return "Please enter your phone number";
                       }
+                      if (value.length < 8){
+                        return "Invalid phone number";
+                      }
                       return null;
                     },
                     decoration: _inputDecoration(

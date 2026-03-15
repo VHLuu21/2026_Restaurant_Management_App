@@ -111,20 +111,33 @@ class AppFoodVertical extends StatelessWidget {
     required MobileMenuDish food,
     required int quantity,
   }) {
-    if (quantity == 0) {
+    /// Không cho order
+    if (!canOrder) {
       return GestureDetector(
         onTap: () {
-          if (!canOrder) {
-            AppShowsnackbar().showCustomSnackBar(
-              "Please make a reservation before adding items to the cart.",
-              false,
-              context,
-            );
-            return;
-          }
-
-          onAddToCart(food);
+          AppShowsnackbar().showCustomSnackBar(
+            "You cannot order with the current reservation status.",
+            false,
+            context,
+          );
         },
+        child: Container(
+          height: 35,
+          width: 80,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade300,
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: const Text("ADD", style: TextStyle(fontSize: 12)),
+        ),
+      );
+    }
+
+    /// Nút ADD
+    if (quantity == 0) {
+      return GestureDetector(
+        onTap: () => onAddToCart(food),
         child: Container(
           height: 35,
           width: 80,
@@ -147,6 +160,7 @@ class AppFoodVertical extends StatelessWidget {
       );
     }
 
+    /// Nút +/- khi đã có trong cart
     return Container(
       height: 35,
       padding: const EdgeInsets.symmetric(horizontal: 8),

@@ -27,6 +27,7 @@ class ReservationSummary {
     required this.phone,
   });
 
+  /// CREATE RESERVATION RESPONSE
   factory ReservationSummary.fromCreateResponse({
     required Map<String, dynamic> json,
     required int tableId,
@@ -51,6 +52,41 @@ class ReservationSummary {
       phone: phone,
     );
   }
+
+  /// COPY WITH (update object safely)
+  ReservationSummary copyWith({
+    int? id,
+    int? tableId,
+    String? tableNumber,
+    int? floor,
+    int? guestCount,
+    DateTime? reservationTime,
+    String? timeSlot,
+    String? status,
+    String? customerName,
+    String? phone,
+  }) {
+    return ReservationSummary(
+      id: id ?? this.id,
+      tableId: tableId ?? this.tableId,
+      tableNumber: tableNumber ?? this.tableNumber,
+      floor: floor ?? this.floor,
+      guestCount: guestCount ?? this.guestCount,
+      reservationTime: reservationTime ?? this.reservationTime,
+      timeSlot: timeSlot ?? this.timeSlot,
+      status: status ?? this.status,
+      customerName: customerName ?? this.customerName,
+      phone: phone ?? this.phone,
+    );
+  }
+
+  /// UPDATE STATUS FROM API
+  factory ReservationSummary.fromStatusJson(
+    ReservationSummary old,
+    Map<String, dynamic> json,
+  ) {
+    return old.copyWith(status: (json['status'] ?? old.status).toString());
+  }
 }
 
 class CartLine {
@@ -68,28 +104,40 @@ class CartLine {
 }
 
 class AppSession {
+  /// TOKEN
   static Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString("token");
   }
 
+  /// CURRENT RESERVATION
   static final ValueNotifier<ReservationSummary?> currentReservation =
       ValueNotifier(null);
 
+  /// CART
   static final ValueNotifier<Map<int, CartLine>> cart = ValueNotifier(
     <int, CartLine>{},
   );
 
-  static void setReservation(ReservationSummary reservation) {
+  /// SET RESERVATION
+  static void setReservation(
+    ReservationSummary reservation, {
+    bool clearCartItems = true,
+  }) {
     currentReservation.value = reservation;
-    clearCart();
+
+    if (clearCartItems) {
+      clearCart();
+    }
   }
 
+  /// CLEAR RESERVATION
   static void clearReservation() {
     currentReservation.value = null;
     clearCart();
   }
 
+  /// ADD DISH
   static void addDish(MobileMenuDish dish) {
     final current = Map<int, CartLine>.from(cart.value);
 
@@ -103,12 +151,14 @@ class AppSession {
     cart.value = current;
   }
 
+  /// REMOVE DISH
   static void removeDish(int dishId) {
     final current = Map<int, CartLine>.from(cart.value);
 
     if (!current.containsKey(dishId)) return;
 
     final line = current[dishId]!;
+
     if (line.quantity <= 1) {
       current.remove(dishId);
     } else {
@@ -118,13 +168,16 @@ class AppSession {
     cart.value = current;
   }
 
+  /// CLEAR CART
   static void clearCart() {
     cart.value = <int, CartLine>{};
   }
 
+  /// TOTAL ITEMS
   static int get cartCount =>
       cart.value.values.fold(0, (sum, item) => sum + item.quantity);
 
+  /// TOTAL PRICE
   static int get totalPrice => cart.value.values.fold(
     0,
     (sum, item) => sum + item.dish.price * item.quantity,
